@@ -1,6 +1,6 @@
 import axios from "axios";
 import { MovieApiResponse, Movie, Rating } from "../types";
-import { ApiError } from "../middleware/error-handler";
+import { HttpError } from "../middleware/error-handler";
 import { config } from "../config";
 
 async function makeOMDBRequest(params: Record<string, string>) {
@@ -15,19 +15,19 @@ async function makeOMDBRequest(params: Record<string, string>) {
 
     if (response.data.Response === "False") {
       console.error("OMDB API Error:", response.data.Error);
-      throw ApiError(response.data.Error || "Movie not found", 404);
+      throw HttpError(response.data.Error || "Movie not found", 404);
     }
 
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 401) {
-        throw ApiError("Invalid OMDB API key", 500);
+        throw HttpError("Invalid OMDB API key", 500);
       }
       if (error.code === "ECONNABORTED") {
-        throw ApiError("OMDB API request timeout", 504);
+        throw HttpError("OMDB API request timeout", 504);
       }
-      throw ApiError("Failed to fetch data from OMDB API", 500);
+      throw HttpError("Failed to fetch data from OMDB API", 500);
     }
     throw error;
   }

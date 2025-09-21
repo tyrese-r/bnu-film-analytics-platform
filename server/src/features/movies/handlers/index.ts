@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { supabase } from "../../../config/supabase";
 import { createClient } from "@supabase/supabase-js";
-import { asyncHandler, ApiError } from "../../../middleware/error-handler";
+import { asyncHandler, HttpError } from "@/middleware/error-handler";
 import {
   authenticateUser,
   AuthenticatedRequest,
@@ -12,7 +12,7 @@ import {
   getMovieByTitle,
   transformOMDBToMovie,
 } from "../../../services/omdbService";
-import { searchTrailer } from "../../../services/youtubeService.ts";
+import { searchTrailer } from "../../../services/youtubeService";
 import {
   ApiResponse,
   Movie,
@@ -32,7 +32,7 @@ export const getAllMovies = asyncHandler(
     const { data: movies, error } = await query;
 
     if (error) {
-      throw ApiError("Failed to fetch movies", 500);
+      throw HttpError("Failed to fetch movies", 500);
     }
 
     // Fetch trailers for movies that don't have them
@@ -81,7 +81,7 @@ export const getMovieById = asyncHandler(
       .single();
 
     if (error || !movie) {
-      throw ApiError("Movie not found", 404);
+      throw HttpError("Movie not found", 404);
     }
 
     // Fetch trailer if it doesn't exist
@@ -173,7 +173,7 @@ export const createMovie = asyncHandler(
     if (error) {
       console.log("Database insert error:", error);
       console.log("Error details:", JSON.stringify(error, null, 2));
-      throw ApiError("Failed to save movie", 500);
+      throw HttpError("Failed to save movie", 500);
     }
 
     const response: ApiResponse<Movie> = {
@@ -217,7 +217,7 @@ export const getMovieReviews = asyncHandler(
       .single();
 
     if (!movie) {
-      throw ApiError("Movie not found", 404);
+      throw HttpError("Movie not found", 404);
     }
 
     const { data: reviews, error } = await supabase
@@ -227,7 +227,7 @@ export const getMovieReviews = asyncHandler(
       .order("created_at", { ascending: false });
 
     if (error) {
-      throw ApiError("Failed to fetch reviews", 500);
+      throw HttpError("Failed to fetch reviews", 500);
     }
 
     const response: ApiResponse<any[]> = {

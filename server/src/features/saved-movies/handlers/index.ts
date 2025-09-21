@@ -5,7 +5,7 @@ import {
   authenticateUser,
   AuthenticatedRequest,
 } from "../../../middleware/auth";
-import { asyncHandler, ApiError } from "../../../middleware/error-handler";
+import { asyncHandler, HttpError } from "../../../middleware/error-handler";
 import { ApiResponse } from "../../../types";
 
 // GET /saved-movies - Get current user's saved movies
@@ -34,7 +34,7 @@ export const getMySavedMovies = asyncHandler(
       .order("created_at", { ascending: false });
 
     if (error) {
-      throw ApiError("Failed to fetch your saved movies", 500);
+      throw HttpError("Failed to fetch your saved movies", 500);
     }
 
     const response: ApiResponse<any[]> = {
@@ -52,7 +52,7 @@ export const saveMovie = asyncHandler(
     const { movie_id } = req.body;
 
     if (!movie_id) {
-      throw ApiError("Movie ID is required", 400);
+      throw HttpError("Movie ID is required", 400);
     }
 
     // Check if movie exists
@@ -63,7 +63,7 @@ export const saveMovie = asyncHandler(
       .single();
 
     if (!movie) {
-      throw ApiError("Movie not found", 404);
+      throw HttpError("Movie not found", 404);
     }
 
     // Check if user already saved this movie
@@ -75,7 +75,7 @@ export const saveMovie = asyncHandler(
       .single();
 
     if (existingSavedMovie) {
-      throw ApiError("You have already saved this movie", 400);
+      throw HttpError("You have already saved this movie", 400);
     }
 
     // Create Supabase client with user's JWT token for RLS
@@ -106,7 +106,7 @@ export const saveMovie = asyncHandler(
       .single();
 
     if (error) {
-      throw ApiError("Failed to save movie", 500);
+      throw HttpError("Failed to save movie", 500);
     }
 
     const response: ApiResponse<any> = {
@@ -146,11 +146,11 @@ export const deleteSavedMovie = asyncHandler(
       .single();
 
     if (!existingSavedMovie) {
-      throw ApiError("Saved movie not found", 404);
+      throw HttpError("Saved movie not found", 404);
     }
 
     if (existingSavedMovie.user_id !== req.user!.id) {
-      throw ApiError(
+      throw HttpError(
         "You do not have permission to delete this saved movie",
         403
       );
@@ -162,7 +162,7 @@ export const deleteSavedMovie = asyncHandler(
       .eq("id", id);
 
     if (error) {
-      throw ApiError("Failed to delete saved movie", 500);
+      throw HttpError("Failed to delete saved movie", 500);
     }
 
     const response: ApiResponse = {

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { supabase } from "../../config/supabase";
-import { ApiError } from "../error-handler";
+import { HttpError } from "../error-handler";
 import { User } from "../../types";
 
 export interface AuthenticatedRequest extends Request {
@@ -20,7 +20,7 @@ export const authenticateUser = async (
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      throw ApiError("No token provided", 401);
+      throw HttpError("No token provided", 401);
     }
 
     const token = authHeader.substring(7); // Remove 'Bearer ' prefix
@@ -31,7 +31,7 @@ export const authenticateUser = async (
     } = await supabase.auth.getUser(token);
 
     if (error || !user) {
-      throw ApiError("Invalid token", 401);
+      throw HttpError("Invalid token", 401);
     }
 
     // Use auth user directly (no custom users table needed)

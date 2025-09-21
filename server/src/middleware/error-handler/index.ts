@@ -32,7 +32,7 @@ export const asyncHandler = (fn: Function) => {
   };
 };
 
-export const ApiError = (
+export const HttpError = (
   message: string,
   statusCode: number = 500,
   code?: string
@@ -40,6 +40,6 @@ export const ApiError = (
   const error = new Error(message) as CustomError;
   error.statusCode = statusCode;
   error.code = code;
-  error.name = "ApiError";
+  error.name = "HttpError";
   return error;
 };

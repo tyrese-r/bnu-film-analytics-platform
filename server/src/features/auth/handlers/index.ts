@@ -4,7 +4,7 @@ import {
   authenticateUser,
   AuthenticatedRequest,
 } from "../../../middleware/auth";
-import { asyncHandler, ApiError } from "../../../middleware/error-handler";
+import { asyncHandler, HttpError } from "../../../middleware/error-handler";
 import {
   ApiResponse,
   CreateUserRequest,
@@ -24,11 +24,11 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
   });
 
   if (authError) {
-    throw ApiError(authError.message, 400);
+    throw HttpError(authError.message, 400);
   }
 
   if (!authData.user) {
-    throw ApiError("Failed to create user", 500);
+    throw HttpError("Failed to create user", 500);
   }
 
   const user: User = {
@@ -62,11 +62,11 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     });
 
   if (authError) {
-    throw ApiError("Invalid credentials", 401);
+    throw HttpError("Invalid credentials", 401);
   }
 
   if (!authData.user || !authData.session) {
-    throw ApiError("Login failed", 500);
+    throw HttpError("Login failed", 500);
   }
 
   const user: User = {
@@ -105,7 +105,7 @@ export const logoutUser = asyncHandler(async (req: Request, res: Response) => {
   const { error } = await supabase.auth.signOut();
 
   if (error) {
-    throw ApiError("Logout failed", 500);
+    throw HttpError("Logout failed", 500);
   }
 
   const response: ApiResponse = {

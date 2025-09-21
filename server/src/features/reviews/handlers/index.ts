@@ -5,7 +5,7 @@ import {
   authenticateUser,
   AuthenticatedRequest,
 } from "../../../middleware/auth";
-import { asyncHandler, ApiError } from "../../../middleware/error-handler";
+import { asyncHandler, HttpError } from "../../../middleware/error-handler";
 import {
   ApiResponse,
   CreateReviewRequest,
@@ -31,7 +31,7 @@ export const getAllReviews = asyncHandler(
     if (error) {
       console.log("Reviews fetch error:", error);
       console.log("Error details:", JSON.stringify(error, null, 2));
-      throw ApiError("Failed to fetch reviews", 500);
+      throw HttpError("Failed to fetch reviews", 500);
     }
 
     const response: ApiResponse<any[]> = {
@@ -58,7 +58,7 @@ export const getMyReviews = asyncHandler(
       .order("created_at", { ascending: false });
 
     if (error) {
-      throw ApiError("Failed to fetch your reviews", 500);
+      throw HttpError("Failed to fetch your reviews", 500);
     }
 
     const response: ApiResponse<any[]> = {
@@ -88,7 +88,7 @@ export const createReview = asyncHandler(
       .single();
 
     if (!movie) {
-      throw ApiError("Movie not found", 404);
+      throw HttpError("Movie not found", 404);
     }
 
     // Check if user already reviewed this movie
@@ -100,7 +100,7 @@ export const createReview = asyncHandler(
       .single();
 
     if (existingReview) {
-      throw ApiError("You have already reviewed this movie", 400);
+      throw HttpError("You have already reviewed this movie", 400);
     }
 
     // Create Supabase client with user's JWT token for RLS
@@ -137,7 +137,7 @@ export const createReview = asyncHandler(
     if (error) {
       console.log("Review creation error:", error);
       console.log("Error details:", JSON.stringify(error, null, 2));
-      throw ApiError("Failed to create review", 500);
+      throw HttpError("Failed to create review", 500);
     }
 
     const response: ApiResponse<any> = {
@@ -168,7 +168,7 @@ export const getReviewById = asyncHandler(
       .single();
 
     if (error || !review) {
-      throw ApiError("Review not found", 404);
+      throw HttpError("Review not found", 404);
     }
 
     const response: ApiResponse<any> = {
@@ -194,14 +194,14 @@ export const updateReview = asyncHandler(
       .single();
 
     if (!existingReview) {
-      throw ApiError(
+      throw HttpError(
         "Review not found or you do not have permission to edit it",
         404
       );
     }
 
     if (existingReview.user_id !== req.user!.id) {
-      throw ApiError(
+      throw HttpError(
         "Review not found or you do not have permission to edit it",
         404
       );
@@ -232,7 +232,7 @@ export const updateReview = asyncHandler(
       .single();
 
     if (error) {
-      throw ApiError("Failed to update review", 500);
+      throw HttpError("Failed to update review", 500);
     }
 
     const response: ApiResponse<any> = {
@@ -258,14 +258,14 @@ export const deleteReview = asyncHandler(
       .single();
 
     if (!existingReview) {
-      throw ApiError(
+      throw HttpError(
         "Review not found or you do not have permission to delete it",
         404
       );
     }
 
     if (existingReview.user_id !== req.user!.id) {
-      throw ApiError(
+      throw HttpError(
         "Review not found or you do not have permission to delete it",
         404
       );
@@ -291,7 +291,7 @@ export const deleteReview = asyncHandler(
     const { error } = await userSupabase.from("reviews").delete().eq("id", id);
 
     if (error) {
-      throw ApiError("Failed to delete review", 500);
+      throw HttpError("Failed to delete review", 500);
     }
 
     const response: ApiResponse = {
