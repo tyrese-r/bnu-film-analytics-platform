@@ -1,4 +1,4 @@
-import { HttpError } from "../../../middleware/error-handler";
+import { HttpError } from "@/middleware/error-handler";
 
 export function validateCreateMovie(body: any) {
   if (!body.title && !body.imdb_id) {

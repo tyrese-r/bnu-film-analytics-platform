@@ -5,7 +5,7 @@ import {
   loginUser,
   getCurrentUser,
   logoutUser,
-} from "../features/auth/handlers";
+} from "@/handlers/auth";
 
 const router = Router();
 

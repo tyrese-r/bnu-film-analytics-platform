@@ -1,19 +1,10 @@
 import { Request, Response } from "express";
-import { supabase } from "../../../config/supabase";
-import {
-  authenticateUser,
-  AuthenticatedRequest,
-} from "../../../middleware/auth";
-import { asyncHandler, HttpError } from "../../../middleware/error-handler";
-import {
-  ApiResponse,
-  CreateUserRequest,
-  LoginRequest,
-  User,
-} from "../../../types";
-import { validateCreateUser, validateLogin } from "../validators";
+import { supabase } from "@/lib/supabase";
+import { authenticateUser, AuthenticatedRequest } from "@/middleware/auth";
+import { asyncHandler, HttpError } from "@/middleware/error-handler";
+import { ApiResponse, CreateUserRequest, LoginRequest, User } from "@/types";
+import { validateCreateUser, validateLogin } from "@/validators/auth";
 
-// POST /users - Create user account
 export const createUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password }: CreateUserRequest = validateCreateUser(req.body);
 

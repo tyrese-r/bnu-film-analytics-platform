@@ -1,4 +1,4 @@
-import { HttpError } from "../../../middleware/error-handler";
+import { HttpError } from "@/middleware/error-handler";
 
 export function validateCreateUser(body: any) {
   if (!body.email || !body.password) {

@@ -1,25 +1,22 @@
 import { Request, Response } from "express";
-import { supabase } from "../../../config/supabase";
+import { supabase } from "..//lib/supabase";
 import { createClient } from "@supabase/supabase-js";
 import { asyncHandler, HttpError } from "@/middleware/error-handler";
-import {
-  authenticateUser,
-  AuthenticatedRequest,
-} from "../../../middleware/auth";
+import { authenticateUser, AuthenticatedRequest } from "@/middleware/auth";
 import {
   searchMovies,
   getMovieByImdbId,
   getMovieByTitle,
   transformOMDBToMovie,
-} from "../../../services/omdbService";
-import { searchTrailer } from "../../../services/youtubeService";
+} from "@/services/omdbService";
+import { searchTrailer } from "@/services/youtubeService";
 import {
   ApiResponse,
   Movie,
   CreateMovieRequest,
   SearchMoviesRequest,
-} from "../../../types";
-import { validateCreateMovie, validateSearchMovies } from "../validators/index";
+} from "@/types";
+import { validateCreateMovie, validateSearchMovies } from "@/validators/movies";
 
 // GET /movies - Get all movies
 export const getAllMovies = asyncHandler(

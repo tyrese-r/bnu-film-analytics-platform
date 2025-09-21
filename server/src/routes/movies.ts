@@ -6,7 +6,7 @@ import {
   createMovie,
   searchOMDBMovies,
   getMovieReviews,
-} from "../features/movies/handlers";
+} from "@/handlers/movies";
 
 const router = Router();
 

@@ -1,17 +1,13 @@
 import { Request, Response } from "express";
-import { supabase } from "../../../config/supabase";
+import { supabase } from "@/lib/supabase";
 import { createClient } from "@supabase/supabase-js";
+import { authenticateUser, AuthenticatedRequest } from "@/middleware/auth";
+import { asyncHandler, HttpError } from "@/middleware/error-handler";
+import { ApiResponse, CreateReviewRequest, UpdateReviewRequest } from "@/types";
 import {
-  authenticateUser,
-  AuthenticatedRequest,
-} from "../../../middleware/auth";
-import { asyncHandler, HttpError } from "../../../middleware/error-handler";
-import {
-  ApiResponse,
-  CreateReviewRequest,
-  UpdateReviewRequest,
-} from "../../../types";
-import { validateCreateReview, validateUpdateReview } from "../validators";
+  validateCreateReview,
+  validateUpdateReview,
+} from "@/validators/reviews";
 
 // GET /reviews - Get all reviews
 export const getAllReviews = asyncHandler(

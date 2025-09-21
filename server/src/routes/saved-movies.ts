@@ -4,11 +4,10 @@ import {
   getMySavedMovies,
   saveMovie,
   deleteSavedMovie,
-} from "../features/saved-movies/handlers";
+} from "@/handlers/saved-movies";
 
 const router = Router();
 
-// Routes
 router.get("/", authenticateUser, getMySavedMovies);
 router.post("/", authenticateUser, saveMovie);
 router.delete("/:id", authenticateUser, deleteSavedMovie);

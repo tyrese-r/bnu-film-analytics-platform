@@ -7,7 +7,7 @@ import {
   getReviewById,
   updateReview,
   deleteReview,
-} from "../features/reviews/handlers";
+} from "@/handlers/reviews";
 
 const router = Router();
 
