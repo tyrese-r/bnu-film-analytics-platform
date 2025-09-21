@@ -1,7 +1,12 @@
 import { Request, Response } from "express";
 import { supabase } from "@/lib/supabase";
 import { createClient } from "@supabase/supabase-js";
-import { authenticateUser, AuthenticatedRequest, asyncHandler, HttpError } from "@/middleware";
+import {
+  authenticateUser,
+  AuthenticatedRequest,
+  asyncHandler,
+  HttpError,
+} from "@/middleware";
 import { ApiResponse, CreateReviewRequest, UpdateReviewRequest } from "@/types";
 import {
   validateCreateReview,
@@ -204,7 +209,7 @@ export const updateReview = asyncHandler(
 
     // Create Supabase client with user's JWT token for RLS
     const authHeader = req.headers.authorization;
-    const token = authHeader?.substring(7); // Remove 'Bearer ' prefix
+    const token = authHeader?.substring(7);
 
     const userSupabase = createClient(
       process.env.SUPABASE_URL!,
