@@ -118,7 +118,7 @@ export async function getMovieByTitle(
   return await makeOMDBRequest(params);
 }
 
-export function transformOMDBToMovie(
+export function convertToMovieSchema(
   omdbData: MovieApiResponse,
   userId?: string
 ): any {

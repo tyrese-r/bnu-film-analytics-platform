@@ -3,7 +3,7 @@ import { AuthenticatedRequest, asyncHandler, HttpError } from "@/middleware";
 import {
   getMovieByImdbId,
   getMovieByTitle,
-  transformOMDBToMovie,
+  convertToMovieSchema,
 } from "@/services/omdbService";
 import { ApiResponse, Movie, CreateMovieRequest } from "@/types";
 import { validateCreateMovie } from "@/validators/movies";
@@ -26,7 +26,7 @@ export const createMovie = asyncHandler(
       movieData = await getMovieByTitle(title, year);
     }
 
-    const movie = transformOMDBToMovie(movieData, req.user?.id);
+    const movie = convertToMovieSchema(movieData, req.user?.id);
 
     const { data: existingMovie } = await supabase
       .from("movies")
