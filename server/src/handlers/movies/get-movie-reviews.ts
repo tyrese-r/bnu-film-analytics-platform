@@ -7,7 +7,6 @@ export const getMovieReviews = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    // Check if movie exists
     const { data: movie } = await supabase
       .from("movies")
       .select("id")
@@ -15,7 +14,7 @@ export const getMovieReviews = asyncHandler(
       .single();
 
     if (!movie) {
-      throw HttpError("Movie not found", 404);
+      throw HttpError("Movie cannot be found", 404);
     }
 
     const { data: reviews, error } = await supabase

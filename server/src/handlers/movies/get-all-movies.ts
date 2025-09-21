@@ -17,7 +17,6 @@ export const getAllMovies = asyncHandler(
       throw HttpError("Failed to fetch movies", 500);
     }
 
-    // Fetch trailers for movies that don't have them
     const moviesWithTrailers = await Promise.all(
       (movies || []).map(async (movie: any) => {
         if (!movie.youtube_trailer_url) {
@@ -27,16 +26,13 @@ export const getAllMovies = asyncHandler(
               movie.release_date
             );
             if (trailerUrl) {
-              // Update the movie in database with trailer URL
               await supabase
                 .from("movies")
                 .update({ youtube_trailer_url: trailerUrl })
                 .eq("id", movie.id);
               movie.youtube_trailer_url = trailerUrl;
             }
-          } catch (error) {
-            console.error(`Failed to fetch trailer for ${movie.title}:`, error);
-          }
+          } catch (error) {}
         }
         return movie;
       })

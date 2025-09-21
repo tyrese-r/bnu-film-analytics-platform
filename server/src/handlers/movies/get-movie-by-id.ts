@@ -18,12 +18,10 @@ export const getMovieById = asyncHandler(
       throw HttpError("Movie not found", 404);
     }
 
-    // Fetch trailer if it doesn't exist
     if (!movie.youtube_trailer_url) {
       try {
         const trailerUrl = await searchTrailer(movie.title, movie.release_date);
         if (trailerUrl) {
-          // Update the movie in database with trailer URL
           await supabase
             .from("movies")
             .update({ youtube_trailer_url: trailerUrl })

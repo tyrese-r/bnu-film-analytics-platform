@@ -17,7 +17,7 @@ export const getMyReviews = asyncHandler(
       .order("created_at", { ascending: false });
 
     if (error) {
-      throw HttpError("Failed to fetch your reviews", 500);
+      throw HttpError("Failed to fetch reviews of current user", 500);
     }
 
     const response: ApiResponse<any[]> = {

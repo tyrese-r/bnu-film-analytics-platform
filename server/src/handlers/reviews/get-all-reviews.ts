@@ -18,8 +18,6 @@ export const getAllReviews = asyncHandler(
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.log("Reviews fetch error:", error);
-      console.log("Error details:", JSON.stringify(error, null, 2));
       throw HttpError("Failed to fetch reviews", 500);
     }
 
