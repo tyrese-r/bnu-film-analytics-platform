@@ -6,7 +6,7 @@ import { ApiResponse, CreateUserRequest, LoginRequest, User } from "@/types";
 import {
   validateSignupRequest,
   validateSigninRequest,
-} from "@/validators/auth/index";
+} from "@/validators/auth";
 
 export const createUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password }: CreateUserRequest = validateSignupRequest(
