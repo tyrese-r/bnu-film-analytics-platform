@@ -1,14 +1,18 @@
 import { Request, Response } from "express";
 import { supabase } from "@/lib/supabase";
-import { authenticateUser, AuthenticatedRequest } from "@/middleware/auth";
+import { AuthenticatedRequest } from "@/middleware/auth";
 import { asyncHandler, HttpError } from "@/middleware/error-handler";
 import { ApiResponse, CreateUserRequest, LoginRequest, User } from "@/types";
-import { validateCreateUser, validateLogin } from "@/validators/auth";
+import {
+  validateSignupRequest,
+  validateSigninRequest,
+} from "@/validators/auth/index";
 
 export const createUser = asyncHandler(async (req: Request, res: Response) => {
-  const { email, password }: CreateUserRequest = validateCreateUser(req.body);
+  const { email, password }: CreateUserRequest = validateSignupRequest(
+    req.body
+  );
 
-  // Create user in Supabase Auth
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
@@ -41,11 +45,9 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
   res.status(201).json(response);
 });
 
-// POST /users/login - Login user
 export const loginUser = asyncHandler(async (req: Request, res: Response) => {
-  const { email, password }: LoginRequest = validateLogin(req.body);
+  const { email, password }: LoginRequest = validateSigninRequest(req.body);
 
-  // Authenticate user with Supabase
   const { data: authData, error: authError } =
     await supabase.auth.signInWithPassword({
       email,
@@ -79,7 +81,6 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
   res.json(response);
 });
 
-// GET /users/me - Get current user
 export const getCurrentUser = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const response: ApiResponse<User> = {
