@@ -1,6 +1,6 @@
 import axios from "axios";
 import { MovieApiResponse, Movie, Rating } from "../types";
-import { HttpError } from "../middleware/error-handler";
+import { HttpError } from "@/middleware";
 import { config } from "../config";
 
 async function makeOMDBRequest(params: Record<string, string>) {

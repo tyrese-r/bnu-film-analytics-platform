@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { validateSignupRequest } from "./validate-signup-request";
-import { HttpError } from "@/middleware/error-handler";
+import { HttpError } from "@/middleware";
 
 describe("validateSignupRequest", () => {
   it("should pass with valid email and password", () => {
@@ -14,17 +14,17 @@ describe("validateSignupRequest", () => {
   });
 
   it("should throw when password is missing", () => {
-    const body = { email: "test@example.com" };
+    const body = { email: "hellomail@example.com" };
     expect(() => validateSignupRequest(body)).toThrow();
   });
 
-  it("should throw when email format is invalid", () => {
-    const body = { email: "invalid-email", password: "password123" };
+  it("should throw when email is invalid email format", () => {
+    const body = { email: "hellomail", password: "hello123" };
     expect(() => validateSignupRequest(body)).toThrow();
   });
 
-  it("should throw when password is too short", () => {
-    const body = { email: "test@example.com", password: "12345" };
+  it("should throw when password is lees than minimum required length", () => {
+    const body = { email: "hello@mail.com", password: "123" };
     expect(() => validateSignupRequest(body)).toThrow();
   });
 });

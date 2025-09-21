@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { supabase } from "../../lib/supabase";
-import { HttpError } from "../error-handler";
-import { User } from "../../types";
+import { supabase } from "../lib/supabase";
+import { HttpError } from "./http-error";
+import { User } from "../types";
 
 export interface AuthenticatedRequest extends Request {
   user?: User;
@@ -20,21 +20,19 @@ export const authenticateUser = async (
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      throw HttpError("No token provided", 401);
+      throw HttpError("Token not found", 401);
     }
 
-    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
-
+    const token = authHeader.substring(7);
     const {
       data: { user },
       error,
     } = await supabase.auth.getUser(token);
 
     if (error || !user) {
-      throw HttpError("Invalid token", 401);
+      throw HttpError("Token is invalid", 401);
     }
 
-    // Use auth user directly (no custom users table needed)
     req.user = {
       id: user.id,
       email: user.email!,

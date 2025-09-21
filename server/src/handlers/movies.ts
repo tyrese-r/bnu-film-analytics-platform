@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { supabase } from "..//lib/supabase";
 import { createClient } from "@supabase/supabase-js";
-import { asyncHandler, HttpError } from "@/middleware/error-handler";
-import { authenticateUser, AuthenticatedRequest } from "@/middleware/auth";
+import { asyncHandler, HttpError, authenticateUser, AuthenticatedRequest } from "@/middleware";
 import {
   searchMovies,
   getMovieByImdbId,

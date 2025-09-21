@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { supabase } from "@/lib/supabase";
-import { AuthenticatedRequest } from "@/middleware/auth";
-import { asyncHandler, HttpError } from "@/middleware/error-handler";
+import { AuthenticatedRequest, asyncHandler, HttpError } from "@/middleware";
 import { ApiResponse, CreateUserRequest, LoginRequest, User } from "@/types";
 import {
   validateSignupRequest,
@@ -23,7 +22,7 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
   }
 
   if (!authData.user) {
-    throw HttpError("Failed to create user", 500);
+    throw HttpError("Unable to create user", 500);
   }
 
   const user: User = {
@@ -39,7 +38,7 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
       user,
       session: authData.session,
     },
-    message: "User created successfully",
+    message: `User: ${user.email} has been created successfully`,
   };
 
   res.status(201).json(response);
@@ -59,7 +58,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
   }
 
   if (!authData.user || !authData.session) {
-    throw HttpError("Login failed", 500);
+    throw HttpError("Failed login attempt", 500);
   }
 
   const user: User = {
@@ -92,12 +91,11 @@ export const getCurrentUser = asyncHandler(
   }
 );
 
-// POST /users/logout - Logout user
 export const logoutUser = asyncHandler(async (req: Request, res: Response) => {
   const { error } = await supabase.auth.signOut();
 
   if (error) {
-    throw HttpError("Logout failed", 500);
+    throw HttpError("Failed logout attempt", 500);
   }
 
   const response: ApiResponse = {

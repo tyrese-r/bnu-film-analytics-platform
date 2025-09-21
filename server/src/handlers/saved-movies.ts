@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { supabase } from "@/lib/supabase";
 import { createClient } from "@supabase/supabase-js";
-import { authenticateUser, AuthenticatedRequest } from "@/middleware/auth";
-import { asyncHandler, HttpError } from "@/middleware/error-handler";
+import { authenticateUser, AuthenticatedRequest, asyncHandler, HttpError } from "@/middleware";
 import { ApiResponse } from "@/types";
 
 // GET /saved-movies - Get current user's saved movies

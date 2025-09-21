@@ -1,4 +1,4 @@
-import { HttpError } from "@/middleware/error-handler";
+import { HttpError } from "@/middleware";
 
 const updateReviewRules = [
   {
