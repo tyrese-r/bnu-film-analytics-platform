@@ -5,11 +5,11 @@ import express from "express";
 import cors from "cors";
 
 import { healthRoutes } from "./routes/health";
+import { authRoutes } from "./routes/auth";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(
   cors({
     origin: process.env.NODE_ENV === "production" ? false : true,
@@ -31,6 +31,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/health", healthRoutes);
+app.use("/api/v1/users", authRoutes);
 
 app.listen(PORT, () => {
   console.log(`--> Server is listening on port ${PORT}`);
