@@ -1,14 +1,27 @@
 import { HttpError } from "@/middleware/error-handler";
 
+const signupRules = [
+  {
+    validate: (body: any) => !!body.email && !!body.password,
+    message: "Both email and password are required",
+    status: 400,
+  },
+  {
+    validate: (body: any) => typeof body.email === "string" && body.email.includes("@"),
+    message: "Email format is invalid",
+    status: 400,
+  },
+  {
+    validate: (body: any) => typeof body.password === "string" && body.password.length >= 6,
+    message: "Password must be a minimum of 6 characters",
+    status: 400,
+  },
+];
+
 export function validateSignupRequest(body: any) {
-  if (!body.email || !body.password) {
-    throw HttpError("Email and password are required", 400);
-  }
-  if (!body.email.includes("@")) {
-    throw HttpError("Invalid email format", 400);
-  }
-  if (body.password.length < 6) {
-    throw HttpError("Password must be at least 6 characters", 400);
+  const failedRule = signupRules.find(rule => !rule.validate(body));
+  if (failedRule) {
+    throw HttpError(failedRule.message, failedRule.status);
   }
   return body;
 }
