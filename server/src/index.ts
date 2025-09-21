@@ -6,6 +6,7 @@ import cors from "cors";
 
 import { healthRoutes } from "./routes/health";
 import { authRoutes } from "./routes/auth";
+import { movieRoutes } from "./routes/movies";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/health", healthRoutes);
 app.use("/api/v1/users", authRoutes);
+app.use("/api/v1/movies", movieRoutes);
 
 app.listen(PORT, () => {
   console.log(`--> Server is listening on port ${PORT}`);
