@@ -8,8 +8,6 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.error("Error:", error);
-
   const statusCode = error.statusCode || 500;
   const message = error.message;
 

@@ -14,7 +14,6 @@ async function makeOMDBRequest(params: Record<string, string>) {
     });
 
     if (response.data.Response === "False") {
-      console.error("OMDB API Error:", response.data.Error);
       throw HttpError(response.data.Error || "Movie not found", 404);
     }
 
@@ -80,8 +79,6 @@ export async function searchMovies(
           ratings: ratings,
         };
       } catch (error) {
-        // Fallback to basic info if detailed fetch fails
-        console.error(`Failed to fetch details for ${movie.Title}:`, error);
         return {
           imdb_id: movie.imdbID,
           title: movie.Title,

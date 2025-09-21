@@ -28,9 +28,7 @@ export const getMovieById = asyncHandler(
             .eq("id", movie.id);
           movie.youtube_trailer_url = trailerUrl;
         }
-      } catch (error) {
-        console.error(`Failed to fetch trailer for ${movie.title}:`, error);
-      }
+      } catch (error) {}
     }
 
     const response: ApiResponse<Movie> = {

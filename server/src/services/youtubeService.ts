@@ -34,10 +34,6 @@ export async function searchTrailer(
 
     return null;
   } catch (error) {
-    console.error(
-      "YouTube search failed:",
-      error instanceof Error ? error.message : "Unknown error"
-    );
     return null;
   }
 }
