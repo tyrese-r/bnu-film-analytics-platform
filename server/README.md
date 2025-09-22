@@ -39,12 +39,31 @@ OMDB_API_KEY=your_omdb_api_key
 YOUTUBE_API_KEY=your_youtube_api_key
 ```
 
+## API Keys Setup
+
+### OMDB API Key
+1. Visit [OMDB API](http://www.omdbapi.com/apikey.aspx)
+2. Sign up for a free account
+3. Choose the free tier (1,000 requests/day)
+4. Copy your API key to the `OMDB_API_KEY` variable
+
+### YouTube Data API Key
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Enable the YouTube Data API v3
+4. Go to "Credentials" and create an API key
+5. Copy your API key to the `YOUTUBE_API_KEY` variable
+
+**Note**: 
+- **OMDB API key is required** for movie search functionality
+- **YouTube API key is optional** - needed for trailer search but not essential (app works without it)
+
 ## Supabase Setup
 
 1. Create a new project on [Supabase](https://supabase.com)
 2. Navigate to the SQL Editor in your Supabase dashboard
 3. Copy and paste the SQL commands from the `SQL` documentation to create the necessary tables
-4. Enable Row Level Security (RLS) on all tables
+4. Enable Row Level Security (RLS) on all tables - **Required for data security**
 5. **Important**: Disable email confirmation in Authentication settings (Settings > Auth > Email confirmation)
 6. Copy your project URL and anon key to the `.env` file
 
@@ -54,37 +73,37 @@ For detailed database setup instructions, refer to the SQL documentation in the 
 
 ### Authentication
 
-- `POST /api/auth/signup` - Create new user account
-- `POST /api/auth/login` - User login
-- `GET /api/auth/me` - Get current user
-- `POST /api/auth/logout` - User logout
+- `POST /api/v1/auth/signup` - Create new user account
+- `POST /api/v1/auth/login` - User login
+- `GET /api/v1/auth/me` - Get current user
+- `POST /api/v1/auth/logout` - User logout
 
 ### Movies
 
-- `GET /api/movies` - Get all movies
-- `GET /api/movies/:id` - Get movie by ID
-- `POST /api/movies` - Create new movie (authenticated)
-- `GET /api/movies/search/omdb` - Search movies on OMDB
-- `GET /api/movies/:id/reviews` - Get reviews for a movie
+- `GET /api/v1/movies` - Get all movies
+- `GET /api/v1/movies/:id` - Get movie by ID
+- `POST /api/v1/movies` - Create new movie (authenticated)
+- `GET /api/v1/movies/search/omdb` - Search movies on OMDB
+- `GET /api/v1/movies/:id/reviews` - Get reviews for a movie
 
 ### Reviews
 
-- `GET /api/reviews` - Get all reviews
-- `GET /api/reviews/my` - Get current user's reviews (authenticated)
-- `POST /api/reviews` - Create new review (authenticated)
-- `GET /api/reviews/:id` - Get review by ID
-- `PUT /api/reviews/:id` - Update review (authenticated)
-- `DELETE /api/reviews/:id` - Delete review (authenticated)
+- `GET /api/v1/reviews` - Get all reviews
+- `GET /api/v1/reviews/my` - Get current user's reviews (authenticated)
+- `POST /api/v1/reviews` - Create new review (authenticated)
+- `GET /api/v1/reviews/:id` - Get review by ID
+- `PUT /api/v1/reviews/:id` - Update review (authenticated)
+- `DELETE /api/v1/reviews/:id` - Delete review (authenticated)
 
 ### Saved Movies
 
-- `GET /api/saved-movies` - Get user's saved movies (authenticated)
-- `POST /api/saved-movies` - Save a movie (authenticated)
-- `DELETE /api/saved-movies/:id` - Remove saved movie (authenticated)
+- `GET /api/v1/saved-movies` - Get user's saved movies (authenticated)
+- `POST /api/v1/saved-movies` - Save a movie (authenticated)
+- `DELETE /api/v1/saved-movies/:id` - Remove saved movie (authenticated)
 
 ### Health
 
-- `GET /api/health` - Health check endpoint
+- `GET /api/v1/health` - Health check endpoint
 
 ## Development
 
@@ -118,4 +137,6 @@ src/
 ├── services/       # External API services
 ├── types/          # TypeScript type definitions
 └── validators/     # Request validation
+
+Files with .spec.ts are unit tests located alongside the functions they test.
 ```
