@@ -34,7 +34,7 @@ export type Rating = {
   value: string;
 };
 
-export type MovieApiResponse = {
+export type OMDBResponse = {
   Title: string;
   Year: string;
   Rated: string;

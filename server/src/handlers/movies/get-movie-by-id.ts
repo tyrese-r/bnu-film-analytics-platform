@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { supabase } from "@/lib/supabase";
 import { asyncHandler, HttpError } from "@/middleware";
-import { searchTrailer } from "@/services/youtubeService";
+import { searchTrailer } from "@/services/youtube";
 import { ApiResponse, Movie } from "@/types";
 
 export const getMovieById = asyncHandler(

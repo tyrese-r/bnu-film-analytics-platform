@@ -11,9 +11,12 @@ export const config = {
     },
     youtube: {
       baseUrl: "https://www.googleapis.com/youtube/v3",
+      watchBaseUrl: "https://www.youtube.com/watch?v=",
       get apiKey() {
         return process.env.YOUTUBE_API_KEY;
       },
+      fallbackUrl:
+        "https://www.youtube.com/watch?v=4bMOTTJqGgM&list=RD4bMOTTJqGgM&start_radio=1",
     },
   },
 } as const;

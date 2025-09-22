@@ -4,7 +4,7 @@ import {
   getMovieByImdbId,
   getMovieByTitle,
   convertToMovieSchema,
-} from "@/services/omdbService";
+} from "@/services/omdb";
 import { ApiResponse, Movie, CreateMovieRequest } from "@/types";
 import { validateCreateMovie } from "@/validators/movies";
 import { supabase, createUserClient } from "@/lib/supabase";
