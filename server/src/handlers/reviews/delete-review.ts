@@ -11,30 +11,21 @@ export const deleteReview = asyncHandler(
     const token = authHeader?.substring(7);
     const userSupabase = createUserClient(token!);
 
-    const { data: existingReview } = await supabase
+    const { data, error } = await userSupabase
       .from("reviews")
-      .select("user_id")
+      .delete()
       .eq("id", id)
-      .single();
-
-    if (!existingReview) {
-      throw HttpError(
-        "Review not found or you do not have permission to delete it",
-        404
-      );
-    }
-
-    if (existingReview.user_id !== req.user!.id) {
-      throw HttpError(
-        "Review not found or you do not have permission to delete it",
-        404
-      );
-    }
-
-    const { error } = await userSupabase.from("reviews").delete().eq("id", id);
+      .select();
 
     if (error) {
       throw HttpError("Failed to delete review", 500);
+    }
+
+    if (!data || data.length === 0) {
+      throw HttpError(
+        "Review not found or you do not have permission to delete it",
+        404
+      );
     }
 
     const response: ApiResponse = {
