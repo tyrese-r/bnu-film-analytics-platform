@@ -1,0 +1,45 @@
+{{#if poster_url}}
+  <img
+    src='{{poster_url}}'
+    alt='Poster for {{title}}'
+    class='img-fluid rounded mb-3'
+  />
+{{/if}}
+<p class='text-secondary small mb-2'>{{detailsLine}}</p>
+<p>{{descriptionText}}</p>
+{{#if ratings.length}}
+  <div class='mb-3'>
+    <h3 class='h6'>Scores</h3>
+    <ul class='list-group list-group-flush border border-secondary rounded'>
+      {{#each ratings}}
+        <li
+          class='list-group-item bg-black text-light d-flex justify-content-between'
+        >
+          {{source}}
+          <span class='fw-semibold'>{{value}}</span>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+{{else}}
+  <p class='text-secondary small'>No critic or audience scores yet.</p>
+{{/if}}
+{{#if reviews.length}}
+  <div>
+    <h3 class='h6'>Recent Reviews</h3>
+    {{#each reviews}}
+      <article class='border border-secondary rounded p-3 mb-2'>
+        <h4 class='h6 mb-1'>{{title}}</h4>
+        <p class='text-secondary small mb-1'>
+          Rating:
+          {{ratingText}}
+          •
+          {{reviewer}}
+        </p>
+        <p class='mb-0'>{{comment}}</p>
+      </article>
+    {{/each}}
+  </div>
+{{else}}
+  <p class='text-secondary small mb-0'>No reviews yet.</p>
+{{/if}}

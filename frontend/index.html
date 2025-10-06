@@ -1,0 +1,299 @@
+<!-- basic home page shell with navbar, hero, movie feed, and detail modal -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BNU Film Analytics Platform</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    />
+    <link rel="icon" href="data:," />
+  </head>
+  <body class="bg-dark text-light min-vh-100">
+    <nav
+      class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-secondary"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">BNU Film</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mainNavbar"
+          aria-controls="mainNavbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#movies">Movies</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#watchlist" id="watchlistNavLink">Watchlist</a>
+            </li>
+          </ul>
+          <div class="d-flex align-items-center gap-2" id="authGuestControls">
+            <button
+              class="btn btn-outline-light"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+            >
+              Login
+            </button>
+            <button
+              class="btn btn-primary"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#signupModal"
+            >
+              Register
+            </button>
+          </div>
+          <div class="d-flex align-items-center gap-2 d-none" id="authUserControls">
+            <span class="small text-secondary" id="authUserEmail"></span>
+            <button class="btn btn-outline-danger btn-sm" id="logoutButton">
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container py-5" id="appRoot">
+      <section class="text-center py-5">
+        <h1 class="display-5">Welcome to the Film Analytics Platform</h1>
+        <p class="lead text-secondary">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sit
+          amet turpis eget ligula condimentum accumsan.
+        </p>
+      </section>
+
+      <!-- MOVIE FEED  -->
+      <section id="movies" class="py-4">
+        <header class="mb-4">
+          <h2 class="h3 mb-1">Latest Movies</h2>
+        </header>
+        <div id="movieStatus" class="alert alert-secondary" role="status">
+          Loading movies...
+        </div>
+        <div
+          id="movieGrid"
+          class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4"
+        ></div>
+      </section>
+
+      <!-- MOVIE SEARCH -->
+      <section id="search" class="py-5 border-top border-secondary mt-5">
+        <header class="mb-4">
+          <h2 class="h3 mb-1">Find Movies</h2>
+          <p class="text-secondary mb-0">Search OMDb and add picks to your watchlist.</p>
+        </header>
+        <form id="searchForm" class="row g-3 align-items-center mb-4" novalidate>
+          <div class="col-sm-8 col-lg-6">
+            <label for="searchQuery" class="form-label">Movie title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="searchQuery"
+              name="query"
+              placeholder="e.g. Interstellar"
+              required
+            />
+            <div class="invalid-feedback">Please enter a movie title.</div>
+          </div>
+          <div class="col-auto align-self-end">
+            <button type="submit" class="btn btn-primary" id="searchSubmit">Search</button>
+          </div>
+        </form>
+        <div id="searchStatus" class="alert alert-secondary d-none" role="status">Ready when you are.</div>
+        <div id="searchResults" class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4"></div>
+      </section>
+
+      <!-- WATCHLIST -->
+      <section id="watchlist" class="py-4">
+        <header class="mb-4 d-flex flex-column flex-md-row justify-content-md-between align-items-md-center gap-2">
+          <h2 class="h3 mb-0">My Watchlist</h2>
+          <p class="text-secondary mb-0">Movies you have saved to watch later.</p>
+        </header>
+        <div id="watchlistStatus" class="alert alert-secondary d-none" role="status"></div>
+        <div
+          id="watchlistGrid"
+          class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4"
+        ></div>
+      </section>
+    </main>
+
+    <!-- MOVIE DETAILS MODAL -->
+    <div
+      class="modal fade"
+      id="movieDetailsModal"
+      tabindex="-1"
+      aria-labelledby="movieDetailsTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content bg-dark text-light border border-secondary">
+          <div class="modal-header border-secondary">
+            <h2 class="modal-title h5" id="movieDetailsTitle">Movie details</h2>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="movieDetailsBody">
+            <p class="text-secondary mb-0">Select a movie to see more info.</p>
+          </div>
+          <div class="modal-footer border-secondary">
+            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTH MODALS -->
+    <div
+      class="modal fade"
+      id="loginModal"
+      tabindex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light border border-secondary">
+          <div class="modal-header border-secondary">
+            <h2 class="h5 modal-title" id="loginModalLabel">Sign in</h2>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="loginForm" novalidate>
+              <div class="mb-3">
+                <label for="loginEmail" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="loginEmail"
+                  name="email"
+                  required
+                  autocomplete="email"
+                />
+                <div class="invalid-feedback">Please enter a valid email.</div>
+              </div>
+              <div class="mb-3">
+                <label for="loginPassword" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="loginPassword"
+                  name="password"
+                  required
+                  minlength="6"
+                  autocomplete="current-password"
+                />
+                <div class="invalid-feedback">
+                  Password must be at least 6 characters.
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary w-100" id="loginSubmit">
+                Sign in
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="signupModal"
+      tabindex="-1"
+      aria-labelledby="signupModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light border border-secondary">
+          <div class="modal-header border-secondary">
+            <h2 class="h5 modal-title" id="signupModalLabel">Create account</h2>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="signupForm" novalidate>
+              <div class="mb-3">
+                <label for="signupEmail" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="signupEmail"
+                  name="email"
+                  required
+                  autocomplete="email"
+                />
+                <div class="invalid-feedback">Please enter a valid email.</div>
+              </div>
+              <div class="mb-3">
+                <label for="signupPassword" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="signupPassword"
+                  name="password"
+                  required
+                  minlength="6"
+                  autocomplete="new-password"
+                />
+                <div class="invalid-feedback">
+                  Password must be at least 6 characters.
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="signupConfirm" class="form-label">Confirm password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="signupConfirm"
+                  name="passwordConfirm"
+                  required
+                  minlength="6"
+                  autocomplete="new-password"
+                />
+                <div class="invalid-feedback">Passwords must match.</div>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary w-100"
+                id="signupSubmit"
+              >
+                Register
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
